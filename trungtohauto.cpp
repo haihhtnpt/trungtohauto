@@ -5,29 +5,42 @@
 #include<string>
 #include <stdio.h>
 #include<list>
+#include<vector>
 using namespace std;
 
 class Node {
 private:
 	Node* next;
+	string str;
 	int data;
 public:
 	Node() {
-		data = 0;
+		str = "";
 		next = NULL;
+		data = 0;
 	}
 	Node(int data) {
 		this->data = data;
 		this->next = NULL;
 	}
+	Node(string str) {
+		this->str = str;
+		this->next = NULL;
+	}
 	int getData() {
 		return data;
+	}
+	string getStr() {
+		return str;
 	}
 	Node* getNext() {
 		return next;
 	}
 	void setData() {
 		this->data = data;
+	}
+	void setStr() {
+		this->str = str;
 	}
 	void setNext(Node* tmp) {
 		this->next = tmp;
@@ -45,7 +58,19 @@ public:
 		pHead = NULL;
 		pTail = NULL;
 	}
-	void Push(int data) {
+	
+	void pushStr(string str) {
+		node tmp = new Node(str);
+		if (pHead == NULL) {
+			pHead = pTail = tmp;
+			return;
+		}
+		else {
+			pTail->setNext(tmp);
+			pTail = tmp;
+		}
+	}
+	void pushData(int data) {
 		node tmp = new Node(data);
 		if (pHead == NULL) {
 			pHead = pTail = tmp;
@@ -90,18 +115,18 @@ private:
 
 
 public:
-	Expression(string value) {
-		value = "";
+	Expression(string str) {
+		value = str;
 	}
 	bool isOperator(char c) {
-		if (c == '+' || c == '-' || c == '*' || c == '/') {
+		if (c == '+' || c == '-' || c == '*' || c == '/' || c == '.')  {
 			return true;
 		}
 		else
 			return false;
 	};
 	bool isOperator(string c) {
-		if (c == "+" || c == "-" || c == "*" || c == "/") {
+		if (c == "+" || c == "-" || c == "*" || c == "/" || c == ".") {
 			return true;
 		}
 		else
@@ -115,30 +140,62 @@ public:
 	list<string> spilit() {
 		list<string> strings;
 		string tmp = "";
+		string tmp2 = "";
+		//	cout<<value.length()<<endl;
 		for (int i = 0; i < value.length(); i++) {
 			if (isOperator(value[i])) {
 				strings.push_back(tmp);
-				strings.push_back("" + value[i]);
+				tmp2 += value[i];
+				strings.push_back(tmp2);
 				tmp = "";
+				tmp2 = "";
 			}
 			else {
-				tmp = tmp + value[i];
+				tmp += value[i];
 			}
 		}
 		return strings;
+	};
+	void push(list<string>& str) {
+
+		for (list<string>::iterator iter = str.begin(); iter != str.end(); ++iter) {
+			cout << *iter << " ";
+		}
 
 	}
-	void push(list<string> str) {
-		for (int i = 0; i < str.size(); i++) {
-			cout << i << "";
-		}
+	int precedence(string str) {
+		if (str == "+" || str == "-")
+			return 1;
+		if (str == "*" || str == "/")
+			return 2;
+		return 0;
 	}
+
+	int calculateforOp(int a, int b, string str) {
+		if (str == "+") return a + b;
+		else if (str == "-") return a - b;
+		else if (str == "*") return a * b;
+		else return a / b;
+	}
+
+	int pushtoStack() {
+		int i;
+		Stack str;
+		Stack value;
+
+		
+
+	}
+
+
+	
 
 
 
 
 
 };
+
 
 
 
@@ -151,18 +208,24 @@ int main()
 	s.Push(2);
 	s.Push(5);
 	s.Push(-4);
+	s.Push("a");
 	s.Pop();
 	s.Push(1);
-	s.getAll()
-	*/;
+	s.getAll();
+	*/
+	s.pushStr("a");
+	s.pushStr("b");
+	s.pushData(1);
+	s.getAll();
 	list<string> a;
-	Expression str("12+12/32");
-	str.spilit();
-	str.push(str.spilit());
-
-
-
-	cout << "demo";
+	Expression str("12+12/32.");
+	//	str.getValue();
+	a = str.spilit();
+	a.pop_back();
+	
+	//	cout<<a.size();
+	str.push(a);
+	//cout << calculate(6, 3, "/");
 
 }
 
